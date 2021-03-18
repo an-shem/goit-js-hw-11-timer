@@ -1,8 +1,8 @@
 export default class CountdownTimer {
-  constructor({ selector, targetDate, onTick }) {
+  constructor({ selector, targetDate }) {
     this.selector = selector;
     this.targetDate = targetDate.getTime();
-    this.onTick = onTick;
+    this.refs = this.getRefs(selector);
   }
 
   start() {
@@ -10,9 +10,29 @@ export default class CountdownTimer {
       const currentTime = Date.now();
       const time = this.targetDate - currentTime;
       const dataTime = this.getTimeComponents(time);
-      this.onTick(dataTime);
+      this.updateClockface(dataTime);
     }, 1000);
   }
+
+  getRefs(selector) {
+    const refs = {};
+
+    refs.timerContainerRef = document.querySelector(`${selector}`);
+    refs.days = refs.timerContainerRef.querySelector('[data-value="days"]');
+    refs.hours = refs.timerContainerRef.querySelector('[data-value="hours"]');
+    refs.mins = refs.timerContainerRef.querySelector('[data-value="mins"]');
+    refs.secs = refs.timerContainerRef.querySelector('[data-value="secs"]');
+
+    return refs;
+  }
+
+  updateClockface({ days, hours, mins, secs }) {
+    this.refs.days.textContent = days;
+    this.refs.hours.textContent = hours;
+    this.refs.mins.textContent = mins;
+    this.refs.secs.textContent = secs;
+  }
+
   getTimeComponents(time) {
     /*
      * Оставшиеся дни: делим значение UTC на 1000 * 60 * 60 * 24, количество
