@@ -3,6 +3,7 @@ export default class CountdownTimer {
     this.selector = selector;
     this.targetDate = targetDate.getTime();
     this.refs = this.getRefs(selector);
+    this.start();
   }
 
   start() {
